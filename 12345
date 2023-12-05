@@ -1,0 +1,183 @@
+import pandas as pd
+import numpy as np
+data = pd.read_csv('C:\\Users\\Admin\\Desktop\\tennis.csv')
+concepts = np.array(data)[:, :-1]
+target = np.array(data)[:, -1]
+ 
+def find_s_algorithm(tar, con):
+    specific_hypothesis = con[0].copy()
+    	
+    for i, val in enumerate(con):
+        if tar[i] == 'yes':
+            for x in range(len(specific_hypothesis)):
+                if val[x] != specific_hypothesis[x]:
+                    specific_hypothesis[x] = '?'
+    return specific_hypothesis
+max_specific_hypothesis = find_s_algorithm(target, concepts)
+print("The Maximally specific hypothesis is:", max_specific_hypothesis)
+
+
+
+
+
+import pandas as pd
+specific_hypothesis = ['0'] * 6
+general_hypothesis = ['?'] * 6
+data = pd.read_csv('tennis.csv')
+for _, row in data.iterrows():
+    attributes = row[:-1].tolist()
+    print(attributes)
+    target = row[-1]
+    if target.lower() == 'yes': 
+        for i in range(6):
+            if specific_hypothesis[i] == '0':
+                specific_hypothesis[i] = attributes[i]
+            elif specific_hypothesis[i] != attributes[i]:
+                specific_hypothesis[i] = '?'
+        for i in range(6):
+            if specific_hypothesis[i] !=''and specific_hypothesis[i] != attributes[i]:
+                general_hypothesis[i] = specific_hypothesis[i]
+    elif target.lower() == 'no': 
+        for i in range(6):
+            if attributes[i] != specific_hypothesis[i]:
+                general_hypothesis[i] = specific_hypothesis[i]
+print("Specific Hypothesis:", specific_hypothesis)
+print("General Hypothesis:", general_hypothesis)
+
+
+
+
+
+
+
+
+import pandas as pd
+import matplotlib.pyplot as plt 
+from sklearn.model_selection import train_test_split 
+from sklearn linear_model import LinearRegression
+data = pd.read_csv('salary_data.csv')
+x = data[['YearsExperience' ]]|
+y = data['Salary']
+plt. scatter (x, y)
+plt.title('Salary vs Experience') plt.xlabel('Years of Experience') plt. ylabel('Salary')
+x_train, x_test, y_train, y_test = train_test_split(
+x, y, test_size=0.3, random_state=42)
+reg = LinearRegression()
+reg.fit（x_train, y_train）
+Y_pred = reg.predict (x_test)
+plt. figure()
+plt. scatter(x_train, y_train, label='Training Data')
+plt.plot(x_train, reg.predict(x_train), color='red', label='Regression Line')
+plt.title('Salary vs Experience (Training Data)') 
+plt.xlabel('Years of Experience') plt.ylabel('Salary') 
+plt. legend() 
+plt. show()
+
+
+
+
+from sklearn.datasets import load_iris 
+from sklearn.model_selection import train_test_split 
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, classification_report,  confusion_matrix
+iris = load_iris()
+X = iris.data
+y = iris.target
+X_train, X_test, y_train, y_test=train_test_split(X, y, test_size=0.2, random_state=42)
+clf = DecisionTreeClassifier()
+clf.fit(X_train,y_train)
+Y_pred = clf.predict(X_test)
+accuracy = accuracy_score (y_test, Y_pred)
+print(f"Accuracy: {accuracy * 100:.2f}%")
+report = classification_report(y_test, Y_pred, target_names=iris.target_names)
+print("Classification Report: In", report)
+confusion = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix: In",confusion)
+
+
+
+
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier 
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+iris=load_iris() 
+X = iris.data
+y = iris.target
+X_train, X_test, y_train, y_test=train_test_split(X, y, test_size=0.2, random_state=42) 
+k=3 
+knn= KNeighborsClassifier(n_neighbors=k) 
+knn.fit(X_train, y_train)
+y_pred = knn.predict(X_test)
+accuracy= accuracy_score(y_test, y_pred) 
+print(f"Accuracy: {accuracy* 100:.2f}%")
+report= classification_report(y_test, y_pred)
+print("Classification Report:\n", report)
+confusion= confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:\n", confusion)
+
+
+
+
+
+
+import pandas as pd 
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, OneHotEncoder 
+from sklearn.compose import ColumnTransformer 
+
+dataset=pd.read_csv('bank_exit.csv') 
+# Filter out unnecessary columns 
+dataset=dataset[['CreditScore','Geography' , 'Gender', 'Age' , 'Tenure' , 'Balance', 'NumOfProducts' , 'HasCrCard' , 'IsActiveMember' , 'EstimatedSalary', 'Exited' ] ] 
+ 
+column_transformer = ColumnTransformer( 
+    transformers=[ 
+        ('encoder', OneHotEncoder(), [ 'Geography' ,'Gender' ]) 
+    ],
+    remainder= 'passthrough' 
+)
+print("Data set: " + str(type(dataset))) 
+
+X = dataset.iloc[:, :-1] 
+y = dataset.iloc[:, -1] 
+
+X_train,X_test, y_train, y_test =train_test_split(X, y, test_size=0.2, random_state=42)
+
+X_train=column_transformer.fit_transform(X_train) 
+X_test = column_transformer.transform(X_test) 
+
+scaler = StandardScaler() 
+X_train=scaler.fit_transform(X_train) 
+X_test = scaler.transform(X_test)
+
+model = tf.keras.Sequential([
+    tf.keras.layers.Dense(units=64, activation='relu', input_dim=X_train.shape[1]),
+    tf.keras.layers.Dense(units=1, activation='sigmoid')
+])
+model.compile(optimizer='adam' , loss='binary_crossentropy' , metrics=['accuracy'])
+model.fit(X_train, y_train, epochs=10,batch_size=32, validation_split=0.2)
+loss, accuracy = model.evaluate(X_test, y_test) 
+print(f'\nTest Loss: {loss:.4f}, Test Accuracy: {accuracy:.4f}')
+
+
+import numpy as np 
+credit_score =int(input("Enter Credit Score: ")) 
+geography = input("Enter Geography (France/Germany/Spain)") 
+gender = input("Enter Gender (Male/Female) :") 
+age = float(input("Enter Age: " ) ) 
+tenure=float(input("Tenure : "))
+balance=float(input( "Enter Balance: " ) )
+num_of_products=float(input("Enter Number of Products: ")) 
+has_cr_card=float(input("Has Credit Card (1 for Yes, for No) :"))
+is_active_member = float(input("Enter Is Active Member (1 for Yes, for No) : "))
+estimated_salary = float(input("Enter Estimated Salary: ")) 
+
+user_input = np.array([[credit_score, geography, gender, age, tenure, balance,num_of_products, has_cr_card, is_active_member, estimated_salary]]) 
+user_df=pd.DataFrame(user_input,columns=['CreditScore' , 'Geography' ,  'Gender', 'Age' , 'Tenure', 'Balance' , 'NumOfProducts' , 'HasCrCard', 'IsActiveMember','EstimatedSalary' ]) 
+
+user_input_encoded=column_transformer.transform(user_df)
+user_input_standardized=scaler.transform(user_input_encoded)
+prediction=model.predict(user_input_standardized)
+print(f"\nPredicted 'Exited' value {prediction[0][0]}")
+
